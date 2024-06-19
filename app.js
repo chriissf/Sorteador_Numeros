@@ -5,39 +5,41 @@ function sortear() {
     let de = parseInt(document.getElementById('de').value);
     let ate = parseInt(document.getElementById('ate').value);
 
-    if (de > ate) {
-        alert('O numero inicial tem que ser maior que o final');
+    if (de >= ate) {
+        alert('O número inicial tem que ser menor que o final');
         reiniciar();
-        alterarStatusBotao();
+        return;
+    }
 
-    } else {
-        // Array para armazenar números sorteados
-        let sorteados = [];
+    if (quantidade > (ate - de + 1)) {
+        alert('Campo "Quantidade" deve ser menor ou igual ao intervalo informado no campo "Do número" até o campo "Até o número". Verifique!');
+        reiniciar();
+        return;
+    }
 
-        // Variável para armazenar o número sorteado em cada iteração
-        let numero;
+    // Array para armazenar números sorteados
+    let sorteados = [];
 
-        // Loop para gerar os números sorteados
-        for (let i = 0; i < quantidade; i++) {
+    // Loop para gerar os números sorteados
+    for (let i = 0; i < quantidade; i++) {
+        let numero = obterNumeroAleatorio(de, ate);
+
+        // Verifica se o número já foi sorteado anteriormente
+        while (sorteados.includes(numero)) {
             numero = obterNumeroAleatorio(de, ate);
-
-            // Verifica se o número já foi sorteado anteriormente
-            while (sorteados.includes(numero)) {
-                numero = obterNumeroAleatorio(de, ate);
-            }
-
-            sorteados.push(numero);
         }
 
-
-        // Exibir os números sorteados no HTML
-        let resultado = document.getElementById('resultado');
-        resultado.innerHTML = `<label class="texto__paragrafo">Números Sorteados ${sorteados}</label>`;
-
-        // Atualiza o status do botão de reinício
-        alterarStatusBotao();
+        sorteados.push(numero);
     }
+
+    // Exibir os números sorteados no HTML
+    let resultado = document.getElementById('resultado');
+    resultado.innerHTML = `<label class="texto__paragrafo">Números sorteados: ${sorteados.join(', ')}</label>`;
+
+    // Atualiza o status do botão de reinício
+    alterarStatusBotao();
 }
+
 // Função para gerar número aleatório entre min e max (inclusive)
 function obterNumeroAleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
